@@ -174,16 +174,57 @@ header{position:sticky;top:0;z-index:50;display:flex;align-items:center;padding:
 ::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--gold-border);border-radius:2px}
+
+/* API Key Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
+.modal-overlay.hide{display:none}
+.modal-box{background:var(--surface);border:1px solid var(--gold-border);border-radius:var(--r);padding:2.2rem 2.4rem;width:480px;max-width:90vw}
+.modal-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:500;color:var(--text);margin-bottom:.4rem}
+.modal-sub{font-size:.65rem;font-weight:300;color:var(--text-dim);letter-spacing:.05em;line-height:1.7;margin-bottom:1.4rem}
+.modal-sub a{color:var(--gold);text-decoration:none}
+.modal-sub a:hover{text-decoration:underline}
+.modal-key-input{width:100%;background:var(--surface2);border:1px solid var(--gold-border);border-radius:var(--r);padding:.65rem .85rem;font-family:'Jost',sans-serif;font-size:.8rem;font-weight:300;color:var(--text);outline:none;margin-bottom:.8rem;letter-spacing:.04em}
+.modal-key-input:focus{border-color:var(--gold)}
+.modal-key-input::placeholder{color:var(--text-dim);letter-spacing:.02em}
+.modal-actions{display:flex;gap:.6rem;justify-content:flex-end;margin-top:.4rem}
+.modal-hint{font-size:.58rem;color:var(--text-dim);line-height:1.7;padding:.55rem .75rem;background:var(--gold-dim);border-left:2px solid var(--gold);border-radius:0 var(--r) var(--r) 0;margin-bottom:1rem}
+/* Key indicator in header */
+.key-indicator{display:flex;align-items:center;gap:.5rem;margin-right:.9rem;cursor:pointer}
+.key-dot{width:7px;height:7px;border-radius:50%;background:#555;flex-shrink:0}
+.key-dot.ok{background:var(--green);box-shadow:0 0 6px rgba(90,122,92,0.6)}
+.key-label{font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim)}
+
+/* Toast */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface2);border:1px solid var(--gold-border);border-radius:var(--r);padding:.65rem 1.4rem;font-size:.65rem;letter-spacing:.1em;color:var(--text-mid);opacity:0;transition:all .3s;z-index:300;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.err{border-color:rgba(122,58,44,0.5);color:#C4806A}
+.toast.ok{border-color:rgba(90,122,92,0.5);color:#7AAF7C}
 </style>
 </head>
 <body>
+
+
+<!-- API Key Modal -->
+<div class="modal-overlay" id="apiModal">
+  <div class="modal-box">
+    <div class="modal-title">ตั้งค่า API Key</div>
+    <div class="modal-sub">Tool นี้ต้องใช้ Anthropic API Key เพื่อให้ AI ทำงานได้ค่ะ<br/>สมัครฟรีได้ที่ <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> → API Keys → Create Key</div>
+    <div class="modal-hint">🔒 Key จะถูกเก็บใน browser ของคุณเท่านั้น ไม่มีการส่งออกไปที่อื่น</div>
+    <input class="modal-key-input" type="password" id="apiKeyInput" placeholder="sk-ant-api03-..." /><div id="apiKeyErr" style="font-size:.6rem;color:#C4806A;min-height:1rem;margin-bottom:.3rem;"></div>
+    <div class="modal-actions">
+      <button class="btn-ghost" style="flex:none;padding:.45rem 1.1rem;" onclick="skipApiKey()">ข้ามไปก่อน</button>
+      <button class="btn-ghost" style="flex:none;padding:.45rem 1.1rem;" onclick="testApiKey()">ทดสอบ Key</button>
+      <button class="btn-pri" style="width:auto;padding:.45rem 1.4rem;" onclick="saveApiKey()">บันทึก Key</button>
+    </div>
+  </div>
+</div>
 
 <header>
   <div class="logo">
     <span class="logo-mark">BF Studio</span>
     <span class="logo-sub">Caption Generator</span>
   </div>
-  <div class="mode-sw">
+  <div class="key-indicator" onclick="openKeyModal()" title="คลิกเพื่อเปลี่ยน API Key"><div class="key-dot" id="keyDot"></div><span class="key-label" id="keyLabel">API Key</span></div><div class="mode-sw">
     <button id="modePreorder" class="mode-btn active" onclick="switchMode('preorder')">✦ Preorder</button>
     <button id="modeSec" class="mode-btn" onclick="switchMode('sec')">♻ มือสอง</button>
   </div>
@@ -313,6 +354,91 @@ header{position:sticky;top:0;z-index:50;display:flex;align-items:center;padding:
 </div>
 
 <script>
+
+// ── API KEY ──
+let API_KEY = localStorage.getItem('bf_api_key') || '';
+
+function initApiKey() {
+  if (!API_KEY) {
+    document.getElementById('apiModal').classList.remove('hide');
+    updateKeyIndicator(false);
+  } else {
+    document.getElementById('apiModal').classList.add('hide');
+    updateKeyIndicator(true);
+  }
+}
+
+function saveApiKey() {
+  const k = document.getElementById('apiKeyInput').value.trim();
+  if (!k || !k.startsWith('sk-')) {
+    document.getElementById('apiKeyInput').style.borderColor = '#C4806A';
+    document.getElementById('apiKeyErr').textContent = 'Key ต้องขึ้นต้นด้วย sk-ant-...';
+    return;
+  }
+  API_KEY = k;
+  localStorage.setItem('bf_api_key', k);
+  document.getElementById('apiModal').classList.add('hide');
+  document.getElementById('apiKeyErr').textContent = '';
+  updateKeyIndicator(true);
+  showToast('✓ บันทึก API Key แล้ว', 'ok');
+}
+
+function skipApiKey() {
+  document.getElementById('apiModal').classList.add('hide');
+}
+
+function openKeyModal() {
+  document.getElementById('apiKeyInput').value = API_KEY || '';
+  document.getElementById('apiModal').classList.remove('hide');
+}
+
+function updateKeyIndicator(ok) {
+  document.getElementById('keyDot').className = 'key-dot' + (ok ? ' ok' : '');
+  document.getElementById('keyLabel').textContent = ok ? 'Key OK' : 'ใส่ Key';
+}
+
+function getHeaders() {
+  return {
+    'Content-Type': 'application/json',
+    'x-api-key': API_KEY,
+    'anthropic-version': '2023-06-01',
+    'anthropic-dangerous-direct-browser-access': 'true'
+  };
+}
+
+initApiKey();
+
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (type ? ' ' + type : '');
+  void t.offsetWidth;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// Test API key connection
+async function testApiKey() {
+  if (!API_KEY) { showToast('กรุณาใส่ API Key ก่อนค่ะ', 'err'); return; }
+  showToast('กำลังทดสอบ Key...');
+  try {
+    const r = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST", headers: getHeaders(),
+      body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 10, messages: [{ role: "user", content: "hi" }] })
+    });
+    const d = await r.json();
+    if (d.error) {
+      showToast('Key ไม่ถูกต้อง: ' + d.error.message, 'err');
+      updateKeyIndicator(false);
+    } else {
+      showToast('✓ Key ใช้งานได้ปกติ!', 'ok');
+      updateKeyIndicator(true);
+    }
+  } catch(e) {
+    showToast('เชื่อมต่อไม่ได้: ' + e.message, 'err');
+  }
+}
+
 // ── MODE ──
 function switchMode(m){
   const p=m==='preorder';
@@ -357,11 +483,11 @@ function doPDF(file){
 async function parsePDF(b64){
   document.getElementById('itemsList').innerHTML='<div class="empty-msg">AI กำลังอ่าน PDF…</div>';
   try{
-    const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:4000,messages:[{role:"user",content:[{type:"document",source:{type:"base64",media_type:"application/pdf",data:b64}},{type:"text",text:'Extract all products. Return ONLY JSON array: [{"no":number,"brand":"string","code":"string","gender":"MEN|WOMEN|UNI","price_hkd":number,"sale_price_hkd":number|null}]'}]}]})});
+    const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:getHeaders(),body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:4000,messages:[{role:"user",content:[{type:"document",source:{type:"base64",media_type:"application/pdf",data:b64}},{type:"text",text:'Extract all products. Return ONLY JSON array: [{"no":number,"brand":"string","code":"string","gender":"MEN|WOMEN|UNI","price_hkd":number,"sale_price_hkd":number|null}]'}]}]})});
     const d=await r.json();
     let t=d.content.map(i=>i.text||'').join('').replace(/```json|```/g,'').trim();
     pItems=JSON.parse(t);renderItems();
-  }catch{document.getElementById('itemsList').innerHTML='<div class="empty-msg" style="color:#C4806A;">อ่านไม่ได้ ลองใหม่</div>'}
+  }catch{document.getElementById('itemsList').innerHTML='<div class="empty-msg" style="color:#C4806A;">อ่านไม่ได้ ลองใหม่</div>';showToast('Error: ตรวจสอบ API Key หรือ network ค่ะ','err')}
 }
 
 function px(item){const rate=parseFloat(document.getElementById('hkdRate').value)||4.6;const mk=parseFloat(document.getElementById('markup').value)||5000;return Math.round((item.sale_price_hkd||item.price_hkd)*rate+mk)}
@@ -382,7 +508,7 @@ function updBtn(){const n=sel.size;document.getElementById('generateBtnText').te
 
 async function lookupName(brand,code){
   try{
-    const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:300,tools:[{type:"web_search_20250305",name:"web_search"}],messages:[{role:"user",content:`Find exact product name: ${brand} style ${code}. Return ONLY JSON: {"product_name":"name or null"}`}]})});
+    const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:getHeaders(),body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:300,tools:[{type:"web_search_20250305",name:"web_search"}],messages:[{role:"user",content:`Find exact product name: ${brand} style ${code}. Return ONLY JSON: {"product_name":"name or null"}`}]})});
     const d=await r.json();const tb=d.content.filter(b=>b.type==='text');
     if(tb.length){try{return JSON.parse(tb[tb.length-1].text.replace(/```json|```/g,'').trim()).product_name||null}catch{return null}}
   }catch{}return null;
@@ -405,7 +531,7 @@ async function generateCaptions(){
     const pn=await lookupName(item.brand,item.code);
     document.getElementById('loadingItemName').textContent=`✍️ ${pn||item.code}`;
     try{
-      const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:400,messages:[{role:"user",content:`Write Instagram caption for Thai preorder luxury shop.\nBrand:${item.brand}, Product:${pn||'use code prefix'}, Code:${item.code}, Gender:${item.gender}, Price:${fmt(p)} THB\nEXACT template:\n[Brand New] ${item.brand} ${pn||'[product type]'}\n\n📍${fmt(p)}.-\n\nทักไลน์สอบถามได้เลยค่ะ ตอบไวดังสายฟ้าฟาด ⚡️\nLine : @bf_preorder หรือ ลิงค์ใน bio ได้เลย\n\n[5-7 hashtags: #preorderbrandname #${item.brand.toLowerCase()}bangkok + type tags]\nReturn ONLY caption.`}]})});
+      const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:getHeaders(),body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:400,messages:[{role:"user",content:`Write Instagram caption for Thai preorder luxury shop.\nBrand:${item.brand}, Product:${pn||'use code prefix'}, Code:${item.code}, Gender:${item.gender}, Price:${fmt(p)} THB\nEXACT template:\n[Brand New] ${item.brand} ${pn||'[product type]'}\n\n📍${fmt(p)}.-\n\nทักไลน์สอบถามได้เลยค่ะ ตอบไวดังสายฟ้าฟาด ⚡️\nLine : @bf_preorder หรือ ลิงค์ใน bio ได้เลย\n\n[5-7 hashtags: #preorderbrandname #${item.brand.toLowerCase()}bangkok + type tags]\nReturn ONLY caption.`}]})});
       const d=await r.json();const cap=d.content.map(x=>x.text||'').join('').trim();
       allCaps.push({item,p,cap,pn});document.getElementById('resultsCount').textContent=`${i+1} / ${tp.length}`;
       renderCap(item,p,cap,pn,i);
@@ -467,7 +593,7 @@ async function generateSecCaptions(){
     document.getElementById('secLoadName').textContent=img.name;
     document.getElementById('secProgFill').style.width=`${(i/secImgs.length)*100}%`;
     try{
-      const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:500,messages:[{role:"user",content:[{type:"image",source:{type:"base64",media_type:img.type,data:img.b64}},{type:"text",text:`Look at image. Identify: brand, product type, price if visible.\nWrite Instagram caption:\n\n[Brand] [product name in English]\n📍[price].-\n\nทักไลน์สอบถามเลยได้เลยค่ะ ตอบไวดังสายฟ้าฟาด ⚡️\nLine : ${lineId} หรือ ลิงค์ใน bio ได้เลย\nเช็คของทางร้านได้ที่แฮชแทค\n#[brand_lowercase]_brandnamefamily #[category]_brandnamefamily\n${shopTags}\n\nRules: price from image (19,999฿→📍19,999.-) else 📍XX,XXX.-\nHashtag 2: bag→#bag_brandnamefamily, shoes→#shoes_brandnamefamily, clothes→#clothes_brandnamefamily, wallet→#wallet_brandnamefamily, watch→#watch_brandnamefamily, other→#accessories_brandnamefamily\nReturn ONLY caption.`}]}]})});
+      const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:getHeaders(),body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:500,messages:[{role:"user",content:[{type:"image",source:{type:"base64",media_type:img.type,data:img.b64}},{type:"text",text:`Look at image. Identify: brand, product type, price if visible.\nWrite Instagram caption:\n\n[Brand] [product name in English]\n📍[price].-\n\nทักไลน์สอบถามเลยได้เลยค่ะ ตอบไวดังสายฟ้าฟาด ⚡️\nLine : ${lineId} หรือ ลิงค์ใน bio ได้เลย\nเช็คของทางร้านได้ที่แฮชแทค\n#[brand_lowercase]_brandnamefamily #[category]_brandnamefamily\n${shopTags}\n\nRules: price from image (19,999฿→📍19,999.-) else 📍XX,XXX.-\nHashtag 2: bag→#bag_brandnamefamily, shoes→#shoes_brandnamefamily, clothes→#clothes_brandnamefamily, wallet→#wallet_brandnamefamily, watch→#watch_brandnamefamily, other→#accessories_brandnamefamily\nReturn ONLY caption.`}]}]})});
       const d=await r.json();const cap=d.content.map(b=>b.text||'').join('').trim();
       secCaps.push({img,cap});document.getElementById('secCnt').textContent=`${i+1} / ${secImgs.length}`;
       renderSecCap(img,cap,i);
@@ -491,5 +617,7 @@ function renderSecCap(img,cap,idx){
 function cpySec(i,b){navigator.clipboard.writeText(document.getElementById(`scap-${i}`).textContent).then(()=>{b.textContent='✓ Copied';b.classList.add('copied');setTimeout(()=>{b.textContent='⬡ Copy';b.classList.remove('copied')},2000)})}
 function secCopyAll(){navigator.clipboard.writeText(secCaps.map(c=>c.cap).join('\n\n---\n\n')).then(()=>{const b=document.getElementById('secCopyAllBtn');b.textContent='✓ Copied!';setTimeout(()=>b.textContent='Copy ทั้งหมด',2000)})}
 </script>
+
+<div class="toast" id="toast"></div>
 </body>
 </html>
