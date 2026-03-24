@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Brandname Family</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#C9A84C;--gold-dim:#7A6028;
+  --bg:#F7F5F0;--surface:#FFF;--surface2:#F2EFE8;--surface3:#EAE6DC;
+  --border:#DDD8CC;--border2:#C8C2B4;
+  --text:#1A1714;--text2:#5C5648;--text3:#9C9488;
+  --green:#2D7D46;--green-bg:#EBF5EF;
+  --red:#C0392B;--red-bg:#FDECEA;
+  --orange:#C47A1E;--orange-bg:#FEF5E7;
+  --blue:#1A5276;--blue-bg:#EAF2F8;
+  --r:10px;--rl:16px;
+  --f:'Sarabun',sans-serif;--fd:'Playfair Display',serif;
+  --sh:0 2px 12px rgba(0,0,0,.08);--shm:0 4px 20px rgba(0,0,0,.12);
+}
+body{background:var(--bg);color:var(--text);font-family:var(--f);font-size:15px;line-height:1.6;margin:0}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+/* Layout */
+.app{display:flex;min-height:100vh}
+.sidebar{width:230px;min-height:100vh;background:var(--text);display:flex;flex-direction:column;position:sticky;top:0;flex-shrink:0}
+.logo{padding:26px 22px 20px;border-bottom:1px solid rgba(255,255,255,.08)}
+.logo h1{font-family:var(--fd);font-size:21px;color:var(--gold)}
+.logo p{font-size:10px;color:rgba(255,255,255,.3);letter-spacing:.15em;text-transform:uppercase;margin-top:2px}
+.nav{padding:14px 10px;flex:1}
+.ns{font-size:10px;color:rgba(255,255,255,.2);letter-spacing:.15em;text-transform:uppercase;padding:10px 10px 5px}
+.ni{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:8px;cursor:pointer;color:rgba(255,255,255,.5);font-size:14px;font-weight:400;transition:.15s;border:none;background:none;width:100%;text-align:left;font-family:var(--f)}
+.ni:hover{background:rgba(255,255,255,.07);color:#fff}
+.ni.on{background:linear-gradient(135deg,rgba(201,168,76,.22),rgba(201,168,76,.08));color:var(--gold);font-weight:600}
+.ni .ic{font-size:14px;width:18px;text-align:center}
+.sf{padding:14px 22px;border-top:1px solid rgba(255,255,255,.07)}
+.sd{display:flex;align-items:center;gap:7px;font-size:11px;color:rgba(255,255,255,.25)}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.main{flex:1;overflow-y:auto;min-width:0}
+.page{display:none;padding:30px;animation:fi .2s ease}
+.page.on{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* Page header */
+.ph{margin-bottom:22px;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.pt{font-family:var(--fd);font-size:27px;font-weight:600;line-height:1.1}
+.pt span{color:var(--gold)}
+.ps{font-size:13px;color:var(--text3);margin-top:3px}
+
+/* Stats */
+.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.sc{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:18px 20px;position:relative;overflow:hidden;transition:.2s;box-shadow:var(--sh)}
+.sc:hover{transform:translateY(-2px);box-shadow:var(--shm)}
+.sc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px}
+.sc.cg::after{background:var(--gold)}.sc.cgr::after{background:var(--green)}.sc.cb::after{background:var(--blue)}.sc.cr::after{background:var(--red)}
+.sl{font-size:11px;color:var(--text3);font-weight:600;letter-spacing:.05em;margin-bottom:7px}
+.sv{font-family:var(--fd);font-size:30px;font-weight:600;line-height:1}
+.sv.g{color:var(--gold-dim)}.sv.gr{color:var(--green)}.sv.r{color:var(--red)}
+.ss{font-size:11px;color:var(--text3);margin-top:5px}
+
+/* Card */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:20px;margin-bottom:18px;box-shadow:var(--sh)}
+.ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.ct{font-size:12px;font-weight:700;color:var(--text2);letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:7px}
+.ct::before{content:'';width:3px;height:13px;background:var(--gold);border-radius:2px;flex-shrink:0}
+
+/* Chart bars */
+.cr2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.br{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.bl{font-size:13px;color:var(--text2);width:115px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bt{flex:1;height:7px;background:var(--surface2);border-radius:4px;overflow:hidden}
+.bf{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--gold-dim),var(--gold));transition:width .7s cubic-bezier(.34,1.56,.64,1)}
+.bc{font-size:12px;color:var(--text3);width:22px;text-align:right;flex-shrink:0;font-weight:600}
+
+/* Table */
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+thead th{font-size:11px;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;text-align:left;padding:9px 13px;border-bottom:2px solid var(--border);font-weight:700;background:var(--surface2)}
+tbody tr{border-bottom:1px solid var(--border);transition:.1s}
+tbody tr:hover{background:var(--surface2)}
+tbody tr:last-child{border-bottom:none}
+td{padding:11px 13px;font-size:14px;color:var(--text2);vertical-align:middle}
+td.b{color:var(--text);font-weight:600}
+td.m{font-family:monospace;font-size:12px;color:var(--gold-dim);font-weight:700}
+
+/* Badge */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600}
+.badge.ins{background:var(--green-bg);color:var(--green)}
+.badge.sol{background:var(--surface2);color:var(--text3)}
+.badge.buy{background:var(--blue-bg);color:var(--blue)}
+.badge.sell{background:var(--orange-bg);color:var(--orange)}
+.badge.both{background:#F3E8FF;color:#7C3AED}
+.badge.pawn{background:#FEE2E2;color:#DC2626}
+.badge.con{background:#E0F2FE;color:#0369A1}
+/* tx type buttons */
+.tx-btn{padding:10px 22px;border-radius:8px;font-family:var(--f);font-size:14px;font-weight:600;cursor:pointer;border:2px solid var(--border);background:var(--surface2);color:var(--text3);transition:.15s}
+.tx-btn:hover{border-color:var(--gold-dim);color:var(--gold-dim)}
+.tx-btn.on{border-color:var(--gold-dim);background:var(--gold-dim);color:#fff}
+
+/* Filter */
+.fr{display:flex;gap:9px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.fr input,.fr select{padding:8px 11px;font-size:13px;font-family:var(--f)}
+.df{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:11px 15px;margin-bottom:18px;flex-wrap:wrap}
+.df label{font-size:12px;font-weight:600;color:var(--text3);white-space:nowrap}
+.df input{max-width:155px;padding:7px 10px;font-size:13px;font-family:var(--f)}
+
+/* Forms */
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px}
+.fga{grid-column:1/-1}
+.fgr{display:flex;flex-direction:column;gap:5px}
+label{font-size:12px;font-weight:600;color:var(--text2)}
+input,select,textarea{background:var(--surface);border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-family:var(--f);font-size:14px;outline:none;transition:.2s;width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.11)}
+input::placeholder,textarea::placeholder{color:var(--text3)}
+textarea{resize:vertical;min-height:70px}
+.box{background:var(--surface2);border-radius:var(--r);padding:16px;margin-bottom:14px}
+.box-title{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
+.brand-other{display:none;margin-top:7px}
+.brand-other.on{display:block}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 20px;border-radius:8px;font-family:var(--f);font-size:14px;font-weight:600;cursor:pointer;border:none;transition:.15s}
+.btn-p{background:var(--gold-dim);color:#fff}.btn-p:hover{background:var(--gold);transform:translateY(-1px);box-shadow:var(--shm)}
+.btn-s{background:var(--surface2);color:var(--text2);border:1.5px solid var(--border2)}.btn-s:hover{border-color:var(--gold-dim);color:var(--gold-dim)}
+.btn-gr{background:var(--green);color:#fff}.btn-gr:hover{filter:brightness(1.08)}
+.bsm{padding:5px 12px;font-size:12px}
+.bg{display:flex;gap:9px;margin-top:18px;flex-wrap:wrap}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
+
+/* Modal */
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.38);z-index:1000;align-items:center;justify-content:center}
+.mo.on{display:flex}
+.md{background:var(--surface);border-radius:var(--rl);padding:26px;width:100%;max-width:540px;box-shadow:var(--shm);animation:fi .2s ease;position:relative;max-height:92vh;overflow-y:auto}
+.md-title{font-family:var(--fd);font-size:19px;font-weight:600;margin-bottom:3px}
+.md-sub{font-size:13px;color:var(--text3);margin-bottom:18px}
+.mc{position:absolute;top:14px;right:16px;background:none;border:none;font-size:19px;cursor:pointer;color:var(--text3);line-height:1}
+
+/* Toast */
+.toast{position:fixed;bottom:22px;right:22px;background:var(--text);border-radius:10px;padding:13px 18px;font-size:14px;color:#fff;display:flex;align-items:center;gap:9px;box-shadow:var(--shm);z-index:9999;transform:translateY(80px);opacity:0;transition:.3s cubic-bezier(.34,1.56,.64,1);max-width:320px}
+.toast.on{transform:translateY(0);opacity:1}
+.toast.ok{border-left:4px solid var(--green)}
+.toast.err{border-left:4px solid var(--red)}
+
+/* Loading / Empty */
+.ld{display:flex;align-items:center;justify-content:center;gap:9px;padding:44px;color:var(--text3);font-size:14px}
+.sp{width:19px;height:19px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.em{text-align:center;padding:50px 20px;color:var(--text3)}
+.em .ei{font-size:34px;margin-bottom:9px;opacity:.35}
+
+/* History & Edit modal extras */
+.info-row{display:flex;gap:6px;margin-bottom:8px;align-items:baseline}
+.info-label{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;width:120px;flex-shrink:0}
+.info-val{font-size:14px;color:var(--text)}
+.divider{border:none;border-top:1px solid var(--border);margin:14px 0}
+.cust-box{background:var(--surface2);border-radius:var(--r);padding:14px;margin-bottom:10px}
+.cust-box-title{font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.log-row{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;align-items:flex-start}
+.log-row:last-child{border-bottom:none}
+.log-time{font-size:11px;color:var(--text3);white-space:nowrap;min-width:120px}
+.log-field{font-weight:600;color:var(--text2)}
+.log-change{color:var(--text3)}
+.log-change s{color:var(--red);text-decoration:line-through}
+.log-change b{color:var(--green)}
+.md-wide{max-width:680px}
+.tab-bar{display:flex;gap:0;background:var(--surface2);border-radius:8px;padding:3px;margin-bottom:18px}
+.tab-btn{flex:1;padding:8px;text-align:center;border-radius:6px;cursor:pointer;font-size:13px;font-weight:500;color:var(--text3);border:none;background:none;font-family:var(--f);transition:.15s}
+.tab-btn.on{background:var(--surface);color:var(--text);font-weight:700;box-shadow:var(--sh)}
+.tab-pane{display:none}.tab-pane.on{display:block}
+
+@media(max-width:1024px){.sg{grid-template-columns:1fr 1fr}.cr2{grid-template-columns:1fr}}
+@media(max-width:640px){.sidebar{width:58px}.logo p,.ni span,.ns,.sd span{display:none}.page{padding:18px 13px}.sg{grid-template-columns:1fr}.fg,.fg3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="logo"><h1>BNF</h1><p>Brandname Family</p></div>
+  <nav class="nav">
+    <div class="ns">ภาพรวม</div>
+    <button class="ni on" onclick="nav('dash',this)"><span class="ic">◈</span><span>Dashboard</span></button>
+    <div class="ns">สินค้า</div>
+    <button class="ni" onclick="nav('stock',this)"><span class="ic">◉</span><span>Stock ทั้งหมด</span></button>
+    <button class="ni" onclick="nav('buy',this)"><span class="ic">＋</span><span>รับซื้อสินค้า</span></button>
+    <div class="ns">ลูกค้า</div>
+    <button class="ni" onclick="nav('custs',this)"><span class="ic">◎</span><span>ลูกค้าทั้งหมด</span></button>
+  </nav>
+  <div class="sf"><div class="sd"><div class="dot"></div><span>Synced · Sheets</span></div></div>
+</aside>
+
+<main class="main">
+
+  <!-- Dashboard -->
+  <div class="page on" id="pg-dash">
+    <div class="ph">
+      <div><div class="pt">Overview <span>Dashboard</span></div><div class="ps">ภาพรวมธุรกิจ Brandname Family</div></div>
+      <button class="btn btn-s bsm" onclick="loadDash()">⟳ Refresh</button>
+    </div>
+    <div id="dash-out"><div class="ld"><div class="sp"></div>กำลังโหลด...</div></div>
+  </div>
+
+  <!-- Stock filter - add tx type -->
+  <!-- Stock -->
+  <div class="page" id="pg-stock">
+    <div class="ph">
+      <div><div class="pt">Stock <span>ทั้งหมด</span></div><div class="ps">รายการสินค้าในระบบ</div></div>
+    </div>
+    <div class="fr">
+      <input type="text" id="sq" placeholder="🔍 ค้นหา แบรนด์ / รุ่น / ชื่อ…" oninput="filterStock()" style="max-width:220px"/>
+      <select id="stx" onchange="filterStock()" style="max-width:130px">
+        <option value="">ประเภทธุรกรรม</option>
+        <option value="รับซื้อ">รับซื้อ</option>
+        <option value="ฝากขาย">ฝากขาย</option>
+        <option value="จำนำ">จำนำ</option>
+      </select>
+      <select id="ss" onchange="filterStock()" style="max-width:130px">
+        <option value="">สถานะทั้งหมด</option>
+        <option value="In Stock">In Stock</option>
+        <option value="Sold Out">Sold Out</option>
+        <option value="ฝากขาย">ฝากขาย</option>
+        <option value="ขายแล้ว">ขายแล้ว</option>
+        <option value="คืนเจ้าของ">คืนเจ้าของ</option>
+        <option value="จำนำ">จำนำ</option>
+        <option value="ไถ่คืนแล้ว">ไถ่คืนแล้ว</option>
+        <option value="หลุดจำนำ">หลุดจำนำ</option>
+      </select>
+      <select id="sb" onchange="filterStock()" style="max-width:140px"><option value="">แบรนด์ทั้งหมด</option></select>
+    </div>
+    <div id="stock-out"><div class="ld"><div class="sp"></div>กำลังโหลด...</div></div>
+  </div>
+
+  <!-- เพิ่มสินค้า (Dynamic Form) -->
+  <div class="page" id="pg-buy">
+    <div class="ph"><div><div class="pt">เพิ่ม<span>สินค้า</span></div><div class="ps">เลือกประเภทธุรกรรมก่อน</div></div></div>
+
+    <!-- เลือกประเภทธุรกรรม -->
+    <div class="card">
+      <div class="ch"><div class="ct">ประเภทธุรกรรม</div></div>
+      <div style="display:flex;gap:10px">
+        <button class="tx-btn on" id="tx-buy" onclick="setTxType('รับซื้อ')">📥 รับซื้อ</button>
+        <button class="tx-btn" id="tx-con" onclick="setTxType('ฝากขาย')">🤝 ฝากขาย</button>
+        <button class="tx-btn" id="tx-pawn" onclick="setTxType('จำนำ')">🏦 จำนำ</button>
+      </div>
+    </div>
+
+    <!-- ข้อมูลสินค้า (ทุกประเภท) -->
+    <div class="card">
+      <div class="ch"><div class="ct">ข้อมูลสินค้า</div></div>
+      <div class="fg3">
+        <div class="fgr"><label>ประเภท *</label>
+          <select id="b-type"><option value="">เลือกประเภท</option><option>กระเป๋า</option><option>รองเท้า</option><option>เสื้อผ้า</option><option>เครื่องประดับ</option><option>นาฬิกา</option><option>อื่นๆ</option></select>
+        </div>
+        <div class="fgr"><label>แบรนด์ *</label>
+          <select id="b-brand" onchange="chkBrand()">
+            <option value="">เลือกแบรนด์</option>
+            <option>Chanel</option><option>Hermès</option><option>Louis Vuitton</option>
+            <option>Dior</option><option>Gucci</option><option>Prada</option><option>Celine</option>
+            <option>Bottega Veneta</option><option>Balenciaga</option><option>Saint Laurent</option>
+            <option>Fendi</option><option>Loewe</option><option>Valentino</option>
+            <option>Burberry</option><option>Rolex</option><option>อื่นๆ (พิมพ์เอง)</option>
+          </select>
+          <input type="text" id="b-brand-o" class="brand-other" placeholder="พิมพ์ชื่อแบรนด์…"/>
+        </div>
+        <div class="fgr"><label>ชื่อรุ่น</label><input type="text" id="b-model" placeholder="Classic Flap, Kelly…"/></div>
+        <div class="fgr"><label>ขนาด</label><input type="text" id="b-size" placeholder="Mini / S / M / Jumbo"/></div>
+        <div class="fgr"><label>สี</label><input type="text" id="b-color" placeholder="Black, Beige…"/></div>
+        <div class="fgr"><label>Hardware</label>
+          <select id="b-hw"><option value="">N/A</option><option>SHW</option><option>GHW</option><option>RGHW</option><option>PHW</option></select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section รับซื้อ -->
+    <div class="card" id="sec-buy">
+      <div class="ch"><div class="ct">📥 ข้อมูลการรับซื้อ</div></div>
+      <div class="fg">
+        <div class="fgr"><label>วันที่รับซื้อ *</label><input type="date" id="b-date"/></div>
+        <div class="fgr"><label>ราคารับซื้อ (฿) *</label><input type="number" id="b-price" placeholder="0"/></div>
+      </div>
+    </div>
+
+    <!-- Section ฝากขาย -->
+    <div class="card" id="sec-con" style="display:none">
+      <div class="ch"><div class="ct">🤝 ข้อมูลการฝากขาย</div></div>
+      <div class="fg">
+        <div class="fgr"><label>วันที่รับฝาก *</label><input type="date" id="b-date-con"/></div>
+        <div class="fgr"><label>วันหมดสัญญาฝาก</label><input type="date" id="b-due-con"/></div>
+        <div class="fgr"><label>ราคาตั้งขาย (฿) *</label><input type="number" id="b-saleprice" placeholder="0" oninput="calcCom()"/></div>
+        <div class="fgr"><label>% ค่าคอม</label><input type="number" id="b-compct" placeholder="10" value="10" oninput="calcCom()"/></div>
+      </div>
+      <div id="com-preview" style="display:none;margin-top:12px;background:var(--surface2);border-radius:8px;padding:12px;font-size:13px">
+        <div style="display:flex;gap:24px">
+          <div><span style="color:var(--text3)">ค่าคอม: </span><b id="com-amt" style="color:var(--orange)">฿0</b></div>
+          <div><span style="color:var(--text3)">เงินคืนเจ้าของ: </span><b id="owner-return" style="color:var(--green)">฿0</b></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section จำนำ -->
+    <div class="card" id="sec-pawn" style="display:none">
+      <div class="ch"><div class="ct">🏦 ข้อมูลการจำนำ</div></div>
+      <div class="fg">
+        <div class="fgr"><label>วันที่รับจำนำ *</label><input type="date" id="b-date-pawn"/></div>
+        <div class="fgr"><label>วันครบกำหนด *</label><input type="date" id="b-due-pawn" oninput="calcPawn()"/></div>
+        <div class="fgr"><label>วงเงินจำนำ (฿) *</label><input type="number" id="b-pawnamt" placeholder="0" oninput="calcPawn()"/></div>
+        <div class="fgr"><label>% ดอกเบี้ย/เดือน</label><input type="number" id="b-intpct" placeholder="3" value="3" oninput="calcPawn()"/></div>
+      </div>
+      <div id="pawn-preview" style="display:none;margin-top:12px;background:var(--surface2);border-radius:8px;padding:12px;font-size:13px">
+        <div style="display:flex;gap:24px;flex-wrap:wrap">
+          <div><span style="color:var(--text3)">จำนวนวัน: </span><b id="pawn-days">0</b> วัน</div>
+          <div><span style="color:var(--text3)">ดอกเบี้ยโดยประมาณ: </span><b id="pawn-int" style="color:var(--orange)">฿0</b></div>
+          <div><span style="color:var(--text3)">ยอดรวมที่ต้องไถ่: </span><b id="pawn-total" style="color:var(--red)">฿0</b></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ข้อมูลเจ้าของ/ผู้จำนำ -->
+    <div class="card">
+      <div class="ch">
+        <div class="ct" id="owner-label">👤 ข้อมูลผู้ขาย</div>
+        <span style="font-size:12px;color:var(--text3)" id="owner-note">บันทึกเป็น Customer อัตโนมัติ</span>
+      </div>
+      <div class="fg">
+        <div class="fgr"><label>ชื่อ-นามสกุล *</label><input type="text" id="b-sname" placeholder="ชื่อ"/></div>
+        <div class="fgr"><label>เบอร์โทร</label><input type="tel" id="b-sphone" placeholder="08X-XXX-XXXX"/></div>
+        <div class="fgr"><label>วันเกิด</label><input type="text" id="b-sdob" placeholder="DD/MM/YYYY"/></div>
+        <div class="fgr"><label>เลขบัตรประชาชน</label><input type="text" id="b-sid" placeholder="X-XXXX-XXXXX-XX-X" maxlength="17"/></div>
+        <div class="fgr fga"><label>ที่อยู่</label><input type="text" id="b-saddr" placeholder="บ้านเลขที่ ถนน แขวง เขต จังหวัด"/></div>
+        <div class="fgr"><label>IG / Line</label><input type="text" id="b-sig" placeholder="@username"/></div>
+      </div>
+    </div>
+
+    <!-- หมายเหตุ -->
+    <div class="card">
+      <div class="fgr"><label>หมายเหตุ</label><textarea id="b-notes" placeholder="สภาพสินค้า อุปกรณ์ที่มาพร้อม…"></textarea></div>
+      <div class="bg">
+        <button class="btn btn-p" id="btn-buy" onclick="saveBuy()">✦ บันทึก → เข้า Stock</button>
+        <button class="btn btn-s" onclick="clearBuyForm()">ล้างฟอร์ม</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ลูกค้า -->
+  <div class="page" id="pg-custs">
+    <div class="ph"><div><div class="pt">All <span>Customers</span></div><div class="ps">ฐานข้อมูลลูกค้าทั้งหมด</div></div></div>
+    <div class="fr">
+      <input type="text" id="cq" placeholder="🔍 ค้นหาชื่อ / เบอร์ / ID…" oninput="filterCusts()" style="max-width:280px"/>
+      <select id="ct-f" onchange="filterCusts()" style="max-width:150px">
+        <option value="">ทุกประเภท</option>
+        <option value="ขาย">ขาย (ขายให้ร้าน)</option>
+        <option value="ซื้อ">ซื้อ (ซื้อจากร้าน)</option>
+      </select>
+    </div>
+    <div id="custs-out"><div class="ld"><div class="sp"></div>กำลังโหลด...</div></div>
+  </div>
+
+</main>
+</div>
+
+<!-- History Modal -->
+<div class="mo" id="hist-mo">
+  <div class="md md-wide">
+    <button class="mc" onclick="document.getElementById('hist-mo').classList.remove('on')">✕</button>
+    <div class="md-title">📋 ประวัติสินค้า</div>
+    <div class="md-sub" id="hist-label">—</div>
+    <div class="tab-bar">
+      <button class="tab-btn on" onclick="switchTab('hist','info')">ข้อมูลสินค้า</button>
+      <button class="tab-btn" onclick="switchTab('hist','seller')">ผู้ขาย (รับซื้อมา)</button>
+      <button class="tab-btn" onclick="switchTab('hist','buyer')">ผู้ซื้อ (ขายออก)</button>
+      <button class="tab-btn" onclick="switchTab('hist','log')">ประวัติแก้ไข</button>
+    </div>
+    <div class="tab-pane on" id="hist-tab-info"></div>
+    <div class="tab-pane" id="hist-tab-seller"></div>
+    <div class="tab-pane" id="hist-tab-buyer"></div>
+    <div class="tab-pane" id="hist-tab-log"></div>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="mo" id="edit-mo">
+  <div class="md md-wide">
+    <button class="mc" onclick="document.getElementById('edit-mo').classList.remove('on')">✕</button>
+    <div class="md-title">✏️ แก้ไขข้อมูลสินค้า</div>
+    <div class="md-sub" id="edit-label">—</div>
+    <input type="hidden" id="edit-row"/>
+    <div class="box">
+      <div class="box-title">ข้อมูลสินค้า</div>
+      <div class="fg3">
+        <div class="fgr"><label>ประเภท</label><select id="e-type"><option>กระเป๋า</option><option>รองเท้า</option><option>เสื้อผ้า</option><option>เครื่องประดับ</option><option>นาฬิกา</option><option>อื่นๆ</option></select></div>
+        <div class="fgr"><label>แบรนด์</label><input type="text" id="e-brand"/></div>
+        <div class="fgr"><label>ชื่อรุ่น</label><input type="text" id="e-model"/></div>
+        <div class="fgr"><label>ขนาด</label><input type="text" id="e-size"/></div>
+        <div class="fgr"><label>สี</label><input type="text" id="e-color"/></div>
+        <div class="fgr"><label>Hardware</label><select id="e-hw"><option value="">N/A</option><option>SHW</option><option>GHW</option><option>RGHW</option><option>PHW</option></select></div>
+      </div>
+    </div>
+    <div class="box">
+      <div class="box-title">ข้อมูลการรับซื้อ</div>
+      <div class="fg">
+        <div class="fgr"><label>วันที่รับซื้อ</label><input type="date" id="e-buydate"/></div>
+        <div class="fgr"><label>ราคารับซื้อ (฿)</label><input type="number" id="e-buyprice"/></div>
+        <div class="fgr"><label>ชื่อผู้ขาย</label><input type="text" id="e-seller"/></div>
+      </div>
+    </div>
+    <div class="box" id="edit-sell-box">
+      <div class="box-title">ข้อมูลการขายออก</div>
+      <div class="fg">
+        <div class="fgr"><label>วันที่ขายออก</label><input type="date" id="e-selldate"/></div>
+        <div class="fgr"><label>ราคาขายออก (฿)</label><input type="number" id="e-sellprice"/></div>
+        <div class="fgr"><label>ชื่อผู้ซื้อ</label><input type="text" id="e-buyer"/></div>
+      </div>
+    </div>
+    <div class="box">
+      <div class="fgr"><label>หมายเหตุการแก้ไข</label><input type="text" id="e-note" placeholder="เหตุผลที่แก้ไข (จะบันทึกใน audit log)"/></div>
+    </div>
+    <div class="bg">
+      <button class="btn btn-p" id="btn-edit" onclick="saveEdit()">💾 บันทึกการแก้ไข</button>
+      <button class="btn btn-s" onclick="document.getElementById('edit-mo').classList.remove('on')">ยกเลิก</button>
+    </div>
+  </div>
+</div>
+<!-- Redeem Modal (ไถ่จำนำ) -->
+<div class="mo" id="redeem-mo">
+  <div class="md">
+    <button class="mc" onclick="document.getElementById('redeem-mo').classList.remove('on')">✕</button>
+    <div class="md-title">💰 บันทึกการไถ่จำนำ</div>
+    <div class="md-sub" id="redeem-label">—</div>
+    <input type="hidden" id="redeem-row"/>
+    <div class="fg" style="margin-bottom:14px">
+      <div class="fgr"><label>วันที่ไถ่คืน *</label><input type="date" id="r-date" oninput="previewRedeem()"/></div>
+    </div>
+    <div id="redeem-preview" style="background:var(--surface2);border-radius:8px;padding:14px;font-size:13px;margin-bottom:16px">
+      <div style="color:var(--text3);margin-bottom:6px">ยอดที่ต้องชำระ (คำนวณ ณ วันที่ไถ่)</div>
+      <div style="font-size:22px;font-weight:700;color:var(--red)">฿<span id="r-total">—</span></div>
+      <div style="font-size:12px;color:var(--text3);margin-top:4px">ดอกเบี้ย: ฿<span id="r-int">—</span></div>
+    </div>
+    <div class="bg">
+      <button class="btn btn-gr" id="btn-redeem" onclick="confirmRedeem()">✓ ยืนยันการไถ่คืน</button>
+      <button class="btn btn-s" onclick="document.getElementById('redeem-mo').classList.remove('on')">ยกเลิก</button>
+    </div>
+  </div>
+</div>
+
+<div class="mo" id="sell-mo">
+  <div class="md">
+    <button class="mc" onclick="closeSell()">✕</button>
+    <div class="md-title">ขายสินค้าออก</div>
+    <div class="md-sub" id="sell-item-label">—</div>
+    <input type="hidden" id="sell-row"/>
+    <input type="hidden" id="sell-buy-price"/>
+
+    <div class="box">
+      <div class="box-title">💰 ข้อมูลการขาย</div>
+      <div class="fg">
+        <div class="fgr"><label>วันที่ขาย *</label><input type="date" id="s-date"/></div>
+        <div class="fgr"><label>ราคาขายออก (฿) *</label><input type="number" id="s-price" placeholder="0" oninput="calcProfit()"/></div>
+        <div class="fgr fga" id="profit-preview" style="display:none">
+          <div style="background:var(--green-bg);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--green);font-weight:600">
+            กำไรโดยประมาณ: ฿<span id="profit-val">0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box-title">👤 ข้อมูลผู้ซื้อ (คุณ C)</div>
+      <div class="fg">
+        <div class="fgr"><label>ชื่อ-นามสกุล *</label><input type="text" id="s-bname" placeholder="ชื่อผู้ซื้อ"/></div>
+        <div class="fgr"><label>เบอร์โทร</label><input type="tel" id="s-bphone" placeholder="08X-XXX-XXXX"/></div>
+      </div>
+      <div style="font-size:11px;color:var(--text3);margin-top:8px">จะบันทึกเป็น Customer ประเภท "ซื้อ" อัตโนมัติ</div>
+    </div>
+
+    <div class="bg">
+      <button class="btn btn-gr" id="btn-sell" onclick="confirmSell()">✓ ยืนยันการขาย → Sold Out</button>
+      <button class="btn btn-s" onclick="closeSell()">ยกเลิก</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let stockData = [];
+let custData  = [];
+
+// ═══════════════════════════════════════
+//  API HELPER — ใช้ fetch แทน google.script.run  
+// ═══════════════════════════════════════
+const GAS = {
+  run: {
+    getDashboardData: () => fetch('/api/dashboard').then(r=>r.json()),
+    getStock: () => fetch('/api/stock').then(r=>r.json()),
+    getCustomers: () => fetch('/api/customers').then(r=>r.json()),
+    getCustomersWithSummary: () => fetch('/api/customers?summary=true').then(r=>r.json()),
+    addStock: (d) => fetch('/api/stock',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)}).then(r=>r.json()),
+    markSoldOut: (row,d) => fetch('/api/stock',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'sell',rowNum:row,data:d})}).then(r=>r.json()),
+    redeemPawn: (row,date) => fetch('/api/stock',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'redeem',rowNum:row,data:{redeemDate:date}})}).then(r=>r.json()),
+    returnConsignment: (row) => fetch('/api/stock',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'return',rowNum:row})}).then(r=>r.json()),
+    forfeitPawn: (row) => fetch('/api/stock',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'forfeit',rowNum:row})}).then(r=>r.json()),
+    updateStock: (row,changes) => fetch('/api/stock',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'update',rowNum:row,data:changes})}).then(r=>r.json()),
+    deleteStock: (row) => fetch('/api/stock',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({rowNum:row})}).then(r=>r.json()),
+    addCustomer: (d) => fetch('/api/customers',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)}).then(r=>r.json()),
+    deleteCustomer: (row) => fetch('/api/customers',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({rowNum:row})}).then(r=>r.json()),
+    getStockDetail: (row) => fetch('/api/stock').then(r=>r.json()).then(all=>{
+      const item=all.find(s=>s._row===row);
+      return {success:!!item, item, seller:null, buyer:null, logs:[]};
+    }),
+  }
+};
+
+// Polyfill: google.script.run wrapper
+const google = {
+  script: {
+    run: new Proxy({}, {
+      get: (_, fn) => ({
+        withSuccessHandler: (cb) => ({
+          withFailureHandler: (eb) => ({
+            [fn]: (...args) => GAS.run[fn]?.(...args).then(cb).catch(eb)
+          })
+        }),
+        withFailureHandler: (eb) => ({
+          withSuccessHandler: (cb) => ({
+            [fn]: (...args) => GAS.run[fn]?.(...args).then(cb).catch(eb)
+          })
+        })
+      })
+    })
+  }
+};
+
+
+// ── Nav ──────────────────────────────────────
+function nav(id, el) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
+  document.getElementById('pg-'+id).classList.add('on');
+  el.classList.add('on');
+  if(id==='dash')  loadDash();
+  if(id==='stock') loadStock();
+  if(id==='custs') loadCusts();
+}
+
+function toast(msg, type='ok') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast on ' + type;
+  setTimeout(()=>t.classList.remove('on'), 3500);
+}
+
+function fmt(n) { return Number(n||0).toLocaleString('th-TH'); }
+
+// ══════════════════════════════════════════════
+//  DASHBOARD
+// ══════════════════════════════════════════════
+function loadDash() {
+  document.getElementById('dash-out').innerHTML='<div class="ld"><div class="sp"></div>กำลังโหลด...</div>';
+  google.script.run
+    .withSuccessHandler(renderDash)
+    .withFailureHandler(()=>{
+      document.getElementById('dash-out').innerHTML='<div class="em"><div class="ei">⚠️</div><p>โหลดไม่ได้ กรุณาตรวจสอบ SHEET_ID</p></div>';
+    })
+    .getDashboardData();
+}
+
+function renderDash(d) {
+  const bBars = Object.entries(d.brandCount||{}).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const tBars = Object.entries(d.typeCount||{}).sort((a,b)=>b[1]-a[1]);
+  const mb = bBars[0]?.[1]||1, mt = tBars[0]?.[1]||1;
+  const pc = d.totalProfit >= 0 ? 'gr' : 'r';
+
+  const inStockRows = (d.inStockItems||[]).map(s=>`
+    <tr>
+      <td class="m">${s['Stock ID']||''}</td>
+      <td class="b">${s['แบรนด์']||''}</td>
+      <td>${s['ชื่อรุ่น']||''}</td>
+      <td>${s['สี']||''} ${s['Hardware']?'· '+s['Hardware']:''}</td>
+      <td style="font-weight:700;color:var(--gold-dim)">฿${fmt(s['ราคารับซื้อ (฿)'])}</td>
+      <td style="font-size:12px;color:var(--text3)">${s['ชื่อเจ้าของ']||s['ชื่อผู้ขาย']||'-'}</td>
+      <td>${s['วันที่รับเข้า']||s['วันที่รับซื้อ']||''}</td>
+    </tr>`).join('');
+
+  const nearRows = (d.nearDueItems||[]).map(s=>`
+    <tr>
+      <td class="m">${s['Stock ID']||''}</td>
+      <td class="b">${s['แบรนด์']||''} ${s['ชื่อรุ่น']||''}</td>
+      <td style="font-weight:600;color:var(--red)">฿${fmt(s['วงเงินจำนำ (฿)'])}</td>
+      <td style="font-size:12px">${s['ชื่อเจ้าของ']||'-'}</td>
+      <td style="font-weight:600;color:var(--red)">${s['วันครบกำหนด']||''}</td>
+      <td style="font-size:13px;color:var(--orange)">฿${fmt(s['ยอดรวมไถ่ (฿)'])}</td>
+    </tr>`).join('');
+
+  document.getElementById('dash-out').innerHTML = `
+    <div class="sg">
+      <div class="sc cg"><div class="sl">In Stock</div><div class="sv g">${d.inStockCount}</div><div class="ss">มูลค่า ฿${fmt(d.inStockValue)}</div></div>
+      <div class="sc cgr"><div class="sl">ขายแล้ว</div><div class="sv gr">${d.soldCount}</div><div class="ss">รายได้ ฿${fmt(d.totalSold)}</div></div>
+      <div class="sc cb"><div class="sl">รับซื้อรวม</div><div class="sv" style="font-size:22px">฿${fmt(d.totalBought)}</div><div class="ss">${d.totalItems} รายการ</div></div>
+      <div class="sc c${pc}"><div class="sl">กำไรสะสม</div><div class="sv ${pc}" style="font-size:22px">฿${fmt(d.totalProfit)}</div><div class="ss">จากรายการที่ขายแล้ว</div></div>
+    </div>
+
+    <!-- จำนำ section -->
+    ${d.pawnCount > 0 || d.nearDueCount > 0 ? `
+    <div class="sg" style="grid-template-columns:repeat(4,1fr)">
+      <div class="sc cr"><div class="sl">🏦 จำนำ (active)</div><div class="sv r">${d.pawnCount}</div><div class="ss">วงเงิน ฿${fmt(d.totalPawnAmt)}</div></div>
+      <div class="sc cr"><div class="sl">⚠️ ใกล้ครบกำหนด (≤7 วัน)</div><div class="sv r">${d.nearDueCount}</div><div class="ss">ต้องติดตาม</div></div>
+      <div class="sc cr"><div class="sl">🔴 เกินกำหนด</div><div class="sv r">${d.overdueCount}</div><div class="ss">รอดำเนินการ</div></div>
+      <div class="sc cg"><div class="sl">💰 ดอกเบี้ยสะสม</div><div class="sv g" style="font-size:22px">฿${fmt(d.totalInterest)}</div><div class="ss">คำนวณ ณ วันนี้</div></div>
+    </div>` : ''}
+
+    ${d.nearDueCount > 0 ? `
+    <div class="card">
+      <div class="ch"><div class="ct" style="color:var(--red)">⚠️ รายการจำนำใกล้ครบกำหนด</div></div>
+      <div class="tw"><table>
+        <thead><tr><th>Stock ID</th><th>สินค้า</th><th>วงเงิน</th><th>ผู้จำนำ</th><th>วันครบกำหนด</th><th>ยอดรวมไถ่</th></tr></thead>
+        <tbody>${nearRows}</tbody>
+      </table></div>
+    </div>` : ''}
+
+    <div class="cr2">
+      <div class="card" style="margin:0">
+        <div class="ct" style="margin-bottom:13px">Top Brands</div>
+        ${bBars.map(([b,c])=>`<div class="br"><div class="bl">${b}</div><div class="bt"><div class="bf" style="width:${(c/mb*100).toFixed(0)}%"></div></div><div class="bc">${c}</div></div>`).join('')||'<p style="color:var(--text3);font-size:13px">ยังไม่มีข้อมูล</p>'}
+      </div>
+      <div class="card" style="margin:0">
+        <div class="ct" style="margin-bottom:13px">ประเภทสินค้า</div>
+        ${tBars.map(([t,c])=>`<div class="br"><div class="bl">${t}</div><div class="bt"><div class="bf" style="width:${(c/mt*100).toFixed(0)}%"></div></div><div class="bc">${c}</div></div>`).join('')||'<p style="color:var(--text3);font-size:13px">ยังไม่มีข้อมูล</p>'}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ch">
+        <div class="ct">สินค้า In Stock</div>
+        <span style="font-size:13px;font-weight:600;color:var(--green)">${d.inStockCount} รายการ · มูลค่า ฿${fmt(d.inStockValue)}</span>
+      </div>
+      <div class="tw"><table>
+        <thead><tr><th>Stock ID</th><th>แบรนด์</th><th>รุ่น</th><th>สี / HW</th><th>ราคารับซื้อ</th><th>เจ้าของ</th><th>วันที่รับเข้า</th></tr></thead>
+        <tbody>${inStockRows||'<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:28px">ไม่มีสินค้า In Stock</td></tr>'}</tbody>
+      </table></div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════════
+//  STOCK LIST
+// ══════════════════════════════════════════════
+function loadStock() {
+  document.getElementById('stock-out').innerHTML='<div class="ld"><div class="sp"></div>กำลังโหลด...</div>';
+  google.script.run
+    .withSuccessHandler(data=>{
+      stockData=data;
+      const brands=[...new Set(data.map(s=>s['แบรนด์']).filter(Boolean))].sort();
+      const sel=document.getElementById('sb');
+      sel.innerHTML='<option value="">แบรนด์ทั้งหมด</option>'+brands.map(b=>`<option>${b}</option>`).join('');
+      renderStock(data);
+    })
+    .withFailureHandler(()=>toast('โหลด stock ไม่ได้','err'))
+    .getStock();
+}
+
+function txBadge(tx, status) {
+  if(tx==='ฝากขาย') return `<span class="badge con">🤝 ฝากขาย</span>`;
+  if(tx==='จำนำ')   return `<span class="badge pawn">🏦 จำนำ</span>`;
+  return status==='In Stock'
+    ? `<span class="badge ins">● In Stock</span>`
+    : `<span class="badge sol">✓ Sold Out</span>`;
+}
+
+function actionBtns(s) {
+  const tx = s['ประเภทธุรกรรม'] || 'รับซื้อ';
+  const st = s['สถานะ'];
+  let btns = `<button class="btn btn-s bsm" onclick="openHistory(${s._row})">📋 ประวัติ</button>
+              <button class="btn btn-s bsm" onclick="openEdit(${s._row})">✏️ Edit</button>`;
+  if(tx==='รับซื้อ' && st==='In Stock')
+    btns += `<button class="btn btn-gr bsm" onclick="openSell(${s._row},'${s['แบรนด์']||''} ${s['ชื่อรุ่น']||''}',${s['ราคารับซื้อ (฿)']||0})">ขายออก</button>`;
+  if(tx==='ฝากขาย' && st==='ฝากขาย')
+    btns += `<button class="btn btn-gr bsm" onclick="openSell(${s._row},'${s['แบรนด์']||''} ${s['ชื่อรุ่น']||''}',0)">ขายออก</button>
+             <button class="btn bsm" style="background:var(--orange-bg);color:var(--orange)" onclick="doReturn(${s._row})">คืนเจ้าของ</button>`;
+  if(tx==='จำนำ' && st==='จำนำ')
+    btns += `<button class="btn btn-gr bsm" onclick="openRedeem(${s._row},'${s['แบรนด์']||''} ${s['ชื่อรุ่น']||''}')">ไถ่คืน</button>
+             <button class="btn bsm" style="background:var(--red-bg);color:var(--red)" onclick="doForfeit(${s._row})">หลุดจำนำ</button>`;
+  btns += `<button class="btn bsm" style="background:var(--red-bg);color:var(--red)" onclick="confirmDelete('stock',${s._row},'${s['Stock ID']||''}')">🗑</button>`;
+  return `<div style="display:flex;gap:5px;flex-wrap:wrap">${btns}</div>`;
+}
+
+function renderStock(items) {
+  if(!items.length){document.getElementById('stock-out').innerHTML='<div class="em"><div class="ei">📦</div><p>ยังไม่มีสินค้า</p></div>';return;}
+  const rows=items.map(s=>`
+    <tr>
+      <td class="m">${s['Stock ID']||''}</td>
+      <td>${txBadge(s['ประเภทธุรกรรม'],s['สถานะ'])}</td>
+      <td class="b">${s['แบรนด์']||''}</td>
+      <td>${s['ชื่อรุ่น']||''}</td>
+      <td>${s['สี']||''}</td><td>${s['Hardware']||''}</td>
+      <td style="font-weight:600">฿${fmt(s['ราคารับซื้อ (฿)']||s['วงเงินจำนำ (฿)']||s['ราคาตั้งขาย (฿)'])}</td>
+      <td style="font-size:13px">${s['ชื่อเจ้าของ']||s['ชื่อผู้ขาย']||'-'}</td>
+      <td style="font-size:13px">${s['ชื่อผู้ซื้อ']||'-'}</td>
+      <td style="font-weight:600;color:${s['กำไร (฿)']>0?'var(--green)':s['กำไร (฿)']<0?'var(--red)':'var(--text3)'}">${s['กำไร (฿)']?'฿'+fmt(s['กำไร (฿)']):'-'}</td>
+      <td>${actionBtns(s)}</td>
+    </tr>`).join('');
+  document.getElementById('stock-out').innerHTML=`
+    <div class="card" style="padding:0;overflow:hidden">
+      <div class="tw"><table>
+        <thead><tr><th>Stock ID</th><th>ประเภท</th><th>แบรนด์</th><th>รุ่น</th><th>สี</th><th>HW</th><th>ราคา</th><th>เจ้าของ</th><th>ผู้ซื้อ</th><th>กำไร</th><th></th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>
+    </div>`;
+}
+
+function filterStock(){
+  const q=document.getElementById('sq').value.toLowerCase();
+  const tx=document.getElementById('stx').value;
+  const s=document.getElementById('ss').value;
+  const b=document.getElementById('sb').value;
+  renderStock(stockData.filter(x=>
+    (!q||JSON.stringify(x).toLowerCase().includes(q))&&
+    (!tx||x['ประเภทธุรกรรม']===tx)&&
+    (!s||x['สถานะ']===s)&&
+    (!b||x['แบรนด์']===b)
+  ));
+}
+
+// ══════════════════════════════════════════════
+//  HISTORY MODAL
+// ══════════════════════════════════════════════
+function switchTab(modal, tab) {
+  const prefix = modal+'-tab-';
+  document.querySelectorAll(`[id^="${prefix}"]`).forEach(p=>p.classList.remove('on'));
+  document.getElementById(prefix+tab).classList.add('on');
+  // update tab buttons
+  const bar = document.getElementById(modal+'-mo').querySelector('.tab-bar');
+  bar.querySelectorAll('.tab-btn').forEach((b,i)=>{
+    const tabs=['info','seller','buyer','log'];
+    b.classList.toggle('on', tabs[i]===tab);
+  });
+}
+
+function custRows(c) {
+  if(!c) return '<p style="color:var(--text3);font-size:13px;padding:8px 0">ไม่มีข้อมูล</p>';
+  const fields = [
+    ['Customer ID', c['Customer ID']],
+    ['ประเภท', c['ประเภท']],
+    ['ชื่อ-นามสกุล', c['ชื่อ-นามสกุล']],
+    ['เบอร์โทร', c['เบอร์โทร']],
+    ['วันเกิด', c['วันเกิด']],
+    ['เลขบัตรปชช.', c['เลขบัตรปชช.']],
+    ['IG / Line', c['IG / Line']],
+    ['ที่อยู่', c['ที่อยู่']],
+    ['วันที่เป็นลูกค้าครั้งแรก', c['วันที่เป็นลูกค้าครั้งแรก']],
+    ['วันที่รับซื้อล่าสุด', c['วันที่รับซื้อล่าสุด']],
+  ];
+  return fields.filter(([,v])=>v).map(([l,v])=>`
+    <div class="info-row"><div class="info-label">${l}</div><div class="info-val">${v}</div></div>`).join('');
+}
+
+function openHistory(rowNum) {
+  document.getElementById('hist-label').textContent = 'กำลังโหลด…';
+  document.getElementById('hist-tab-info').innerHTML = '<div class="ld"><div class="sp"></div>กำลังโหลด...</div>';
+  ['seller','buyer','log'].forEach(t=>document.getElementById('hist-tab-'+t).innerHTML='');
+  switchTab('hist','info');
+  document.getElementById('hist-mo').classList.add('on');
+
+  google.script.run
+    .withSuccessHandler(res => {
+      if(!res.success){document.getElementById('hist-tab-info').innerHTML='<p style="color:var(--red)">โหลดไม่ได้: '+res.error+'</p>';return;}
+      const s = res.item;
+      document.getElementById('hist-label').textContent = (s['แบรนด์']||'') + ' ' + (s['ชื่อรุ่น']||'') + ' · ' + (s['Stock ID']||'');
+
+      // Tab: Info
+      document.getElementById('hist-tab-info').innerHTML = `
+        <div class="cust-box">
+          <div class="cust-box-title">📦 รายละเอียดสินค้า</div>
+          ${[['Stock ID',s['Stock ID']],['สถานะ',s['สถานะ']],['ประเภท',s['ประเภท']],['แบรนด์',s['แบรนด์']],['ชื่อรุ่น',s['ชื่อรุ่น']],['ขนาด',s['ขนาด']],['สี',s['สี']],['Hardware',s['Hardware']],['หมายเหตุ',s['หมายเหตุ']]].filter(([,v])=>v).map(([l,v])=>`<div class="info-row"><div class="info-label">${l}</div><div class="info-val">${v}</div></div>`).join('')}
+        </div>
+        <div class="cust-box">
+          <div class="cust-box-title">💰 ข้อมูลราคา</div>
+          ${[['วันที่รับซื้อ',s['วันที่รับซื้อ']],['ราคารับซื้อ',s['ราคารับซื้อ (฿)']?'฿'+fmt(s['ราคารับซื้อ (฿)']):'-'],['วันที่ขายออก',s['วันที่ขายออก']||'-'],['ราคาขายออก',s['ราคาขายออก (฿)']?'฿'+fmt(s['ราคาขายออก (฿)']):'-'],['กำไร',s['กำไร (฿)']?'฿'+fmt(s['กำไร (฿)']):'-']].map(([l,v])=>`<div class="info-row"><div class="info-label">${l}</div><div class="info-val" style="${l==='กำไร'&&s['กำไร (฿)']>0?'color:var(--green);font-weight:700':''}">${v}</div></div>`).join('')}
+        </div>`;
+
+      // Tab: Seller
+      document.getElementById('hist-tab-seller').innerHTML = `
+        <div class="cust-box">
+          <div class="cust-box-title">👤 ผู้ขาย — รับซื้อมาจาก</div>
+          ${custRows(res.seller)}
+        </div>`;
+
+      // Tab: Buyer
+      document.getElementById('hist-tab-buyer').innerHTML = res.buyer ? `
+        <div class="cust-box">
+          <div class="cust-box-title">👤 ผู้ซื้อ — ขายออกให้</div>
+          ${custRows(res.buyer)}
+        </div>` : '<div class="cust-box"><p style="color:var(--text3);font-size:13px">ยังไม่มีการขายออก (In Stock)</p></div>';
+
+      // Tab: Audit log
+      const logs = res.logs || [];
+      document.getElementById('hist-tab-log').innerHTML = logs.length
+        ? logs.map(l=>`
+            <div class="log-row">
+              <div class="log-time">${l.editedAt}</div>
+              <div style="flex:1">
+                <div class="log-field">${l.field}</div>
+                <div class="log-change"><s>${l.oldVal||'(ว่าง)'}</s> → <b>${l.newVal}</b></div>
+                ${l.editedBy?`<div style="font-size:11px;color:var(--text3);margin-top:2px">หมายเหตุ: ${l.editedBy}</div>`:''}
+              </div>
+            </div>`).join('')
+        : '<p style="color:var(--text3);font-size:13px;padding:8px 0">ยังไม่มีประวัติการแก้ไข</p>';
+    })
+    .withFailureHandler(()=>{document.getElementById('hist-tab-info').innerHTML='<p style="color:var(--red)">โหลดไม่ได้</p>';})
+    .getStockDetail(rowNum);
+}
+
+// ══════════════════════════════════════════════
+//  EDIT MODAL
+// ══════════════════════════════════════════════
+function openEdit(rowNum) {
+  document.getElementById('edit-label').textContent = 'กำลังโหลด…';
+  document.getElementById('edit-mo').classList.add('on');
+
+  google.script.run
+    .withSuccessHandler(res => {
+      if(!res.success){toast('โหลดข้อมูลไม่ได้','err');return;}
+      const s = res.item;
+      document.getElementById('edit-row').value   = rowNum;
+      document.getElementById('edit-label').textContent = (s['แบรนด์']||'') + ' ' + (s['ชื่อรุ่น']||'') + ' · ' + (s['Stock ID']||'');
+      document.getElementById('e-type').value     = s['ประเภท']||'';
+      document.getElementById('e-brand').value    = s['แบรนด์']||'';
+      document.getElementById('e-model').value    = s['ชื่อรุ่น']||'';
+      document.getElementById('e-size').value     = s['ขนาด']||'';
+      document.getElementById('e-color').value    = s['สี']||'';
+      document.getElementById('e-hw').value       = s['Hardware']||'';
+      // buy date: convert th-TH back to ISO if possible
+      document.getElementById('e-buydate').value  = toISODate(s['วันที่รับซื้อ']);
+      document.getElementById('e-buyprice').value = s['ราคารับซื้อ (฿)']||'';
+      document.getElementById('e-seller').value   = s['ชื่อผู้ขาย']||'';
+      document.getElementById('e-selldate').value = toISODate(s['วันที่ขายออก']);
+      document.getElementById('e-sellprice').value= s['ราคาขายออก (฿)']||'';
+      document.getElementById('e-buyer').value    = s['ชื่อผู้ซื้อ']||'';
+      document.getElementById('e-note').value     = '';
+      // show/hide sell section
+      document.getElementById('edit-sell-box').style.display = s['สถานะ']==='Sold Out' ? 'block' : 'none';
+    })
+    .withFailureHandler(()=>toast('โหลดข้อมูลไม่ได้','err'))
+    .getStockDetail(rowNum);
+}
+
+function toISODate(thDate) {
+  if(!thDate) return '';
+  // try native parse first
+  const d = new Date(thDate);
+  if(!isNaN(d)) return d.toISOString().split('T')[0];
+  return '';
+}
+
+function saveEdit() {
+  const rowNum = parseInt(document.getElementById('edit-row').value);
+  const note   = document.getElementById('e-note').value;
+  const buyDateRaw  = document.getElementById('e-buydate').value;
+  const sellDateRaw = document.getElementById('e-selldate').value;
+
+  const changes = {
+    'ประเภท':           document.getElementById('e-type').value,
+    'แบรนด์':           document.getElementById('e-brand').value,
+    'ชื่อรุ่น':         document.getElementById('e-model').value,
+    'ขนาด':             document.getElementById('e-size').value,
+    'สี':               document.getElementById('e-color').value,
+    'Hardware':         document.getElementById('e-hw').value,
+    'วันที่รับซื้อ':    buyDateRaw  ? new Date(buyDateRaw).toLocaleDateString('th-TH')  : '',
+    'ราคารับซื้อ (฿)':  document.getElementById('e-buyprice').value,
+    'ชื่อผู้ขาย':       document.getElementById('e-seller').value,
+    'วันที่ขายออก':     sellDateRaw ? new Date(sellDateRaw).toLocaleDateString('th-TH') : '',
+    'ราคาขายออก (฿)':   document.getElementById('e-sellprice').value,
+    'ชื่อผู้ซื้อ':       document.getElementById('e-buyer').value,
+    '_note':             note,
+  };
+
+  const btn = document.getElementById('btn-edit');
+  btn.disabled=true; btn.textContent='⏳ กำลังบันทึก...';
+  google.script.run
+    .withSuccessHandler(res=>{
+      btn.disabled=false; btn.textContent='💾 บันทึกการแก้ไข';
+      if(res.success){
+        toast('✅ บันทึกการแก้ไขสำเร็จ');
+        document.getElementById('edit-mo').classList.remove('on');
+        stockData = [];
+        loadStock();
+        loadDash();
+      } else toast('❌ '+res.error,'err');
+    })
+    .withFailureHandler(()=>{btn.disabled=false;btn.textContent='💾 บันทึกการแก้ไข';toast('❌ บันทึกไม่สำเร็จ','err');})
+    .updateStock(rowNum, changes);
+}
+function openSell(row, label, buyPrice) {
+  document.getElementById('sell-row').value = row;
+  document.getElementById('sell-buy-price').value = buyPrice;
+  document.getElementById('sell-item-label').textContent = label;
+  document.getElementById('s-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('s-price').value = '';
+  document.getElementById('s-bname').value = '';
+  document.getElementById('s-bphone').value = '';
+  document.getElementById('profit-preview').style.display='none';
+  document.getElementById('sell-mo').classList.add('on');
+}
+
+function closeSell() {
+  document.getElementById('sell-mo').classList.remove('on');
+}
+
+function calcProfit() {
+  const bp = parseFloat(document.getElementById('sell-buy-price').value)||0;
+  const sp = parseFloat(document.getElementById('s-price').value)||0;
+  const profit = sp - bp;
+  const preview = document.getElementById('profit-preview');
+  if(sp > 0) {
+    preview.style.display='block';
+    preview.querySelector('#profit-val').textContent = fmt(profit);
+    preview.querySelector('div').style.background = profit>=0 ? 'var(--green-bg)' : 'var(--red-bg)';
+    preview.querySelector('div').style.color = profit>=0 ? 'var(--green)' : 'var(--red)';
+  } else {
+    preview.style.display='none';
+  }
+}
+
+function confirmSell() {
+  const row   = parseInt(document.getElementById('sell-row').value);
+  const price = document.getElementById('s-price').value;
+  const date  = document.getElementById('s-date').value;
+  const bname = document.getElementById('s-bname').value.trim();
+  if(!price||!date||!bname){toast('⚠️ กรุณากรอกวันที่ ราคา และชื่อผู้ซื้อ','err');return;}
+  const btn=document.getElementById('btn-sell');
+  btn.disabled=true; btn.textContent='⏳ กำลังบันทึก...';
+  google.script.run
+    .withSuccessHandler(res=>{
+      btn.disabled=false; btn.textContent='✓ ยืนยันการขาย → Sold Out';
+      if(res.success){
+        toast('✅ Sold Out! กำไร ฿'+fmt(res.profit));
+        closeSell(); loadStock(); loadDash();
+      } else toast('❌ '+res.error,'err');
+    })
+    .withFailureHandler(()=>{btn.disabled=false;btn.textContent='✓ ยืนยันการขาย → Sold Out';toast('❌ บันทึกไม่สำเร็จ','err');})
+    .markSoldOut(row, {
+      sellDate:   new Date(date).toLocaleDateString('th-TH'),
+      sellPrice:  price,
+      buyerName:  bname,
+      buyerPhone: document.getElementById('s-bphone').value,
+    });
+}
+
+// ══════════════════════════════════════════════
+//  REDEEM PAWN (ไถ่จำนำ)
+// ══════════════════════════════════════════════
+function openRedeem(row, label) {
+  document.getElementById('redeem-row').value = row;
+  document.getElementById('redeem-label').textContent = label;
+  document.getElementById('r-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('r-total').textContent = '—';
+  document.getElementById('r-int').textContent = '—';
+  document.getElementById('redeem-mo').classList.add('on');
+  previewRedeem();
+}
+
+function previewRedeem() {
+  const row  = parseInt(document.getElementById('redeem-row').value);
+  const date = document.getElementById('r-date').value;
+  if(!row || !date) return;
+  const item = stockData.find(s => s._row === row);
+  if(!item) return;
+  const pawnAmt = parseFloat(item['วงเงินจำนำ (฿)'])||0;
+  const intPct  = parseFloat(item['% ดอกเบี้ย/เดือน'])||0;
+  const start   = item['วันที่รับเข้า'] || item['วันที่รับซื้อ'];
+  try {
+    const days    = Math.round((new Date(date) - new Date(start)) / 86400000);
+    const interest = Math.round(pawnAmt * intPct / 100 * (days/30));
+    document.getElementById('r-total').textContent = fmt(pawnAmt + interest);
+    document.getElementById('r-int').textContent   = fmt(interest);
+  } catch(e) {}
+}
+
+function confirmRedeem() {
+  const row  = parseInt(document.getElementById('redeem-row').value);
+  const date = document.getElementById('r-date').value;
+  if(!date){toast('⚠️ กรุณาเลือกวันที่ไถ่','err');return;}
+  const btn = document.getElementById('btn-redeem');
+  btn.disabled=true; btn.textContent='⏳ กำลังบันทึก...';
+  google.script.run
+    .withSuccessHandler(res=>{
+      btn.disabled=false; btn.textContent='✓ ยืนยันการไถ่คืน';
+      if(res.success){
+        toast('✅ ไถ่คืนสำเร็จ! ยอดรวม ฿'+fmt(res.total));
+        document.getElementById('redeem-mo').classList.remove('on');
+        stockData=[]; loadStock(); loadDash();
+      } else toast('❌ '+res.error,'err');
+    })
+    .withFailureHandler(()=>{btn.disabled=false;btn.textContent='✓ ยืนยันการไถ่คืน';toast('❌ บันทึกไม่สำเร็จ','err');})
+    .redeemPawn(row, date);
+}
+
+// ══════════════════════════════════════════════
+//  RETURN CONSIGNMENT (คืนสินค้าฝากขาย)
+// ══════════════════════════════════════════════
+function doReturn(row) {
+  if(!confirm('ยืนยันคืนสินค้าให้เจ้าของ?\nสถานะจะเปลี่ยนเป็น "คืนเจ้าของ"')) return;
+  google.script.run
+    .withSuccessHandler(res=>{
+      if(res.success){ toast('✅ คืนสินค้าสำเร็จ'); stockData=[]; loadStock(); loadDash(); }
+      else toast('❌ '+res.error,'err');
+    })
+    .withFailureHandler(()=>toast('❌ บันทึกไม่สำเร็จ','err'))
+    .returnConsignment(row);
+}
+
+// ══════════════════════════════════════════════
+//  FORFEIT PAWN (หลุดจำนำ)
+// ══════════════════════════════════════════════
+function doForfeit(row) {
+  if(!confirm('ยืนยันสินค้าหลุดจำนำ?\nสินค้าจะถูกย้ายเข้า Stock ใหม่เป็นประเภทรับซื้อ')) return;
+  google.script.run
+    .withSuccessHandler(res=>{
+      if(res.success){ toast('✅ บันทึกหลุดจำนำสำเร็จ สินค้าย้ายเข้า Stock แล้ว'); stockData=[]; loadStock(); loadDash(); }
+      else toast('❌ '+res.error,'err');
+    })
+    .withFailureHandler(()=>toast('❌ บันทึกไม่สำเร็จ','err'))
+    .forfeitPawn(row);
+}
+
+// ══════════════════════════════════════════════
+//  TRANSACTION TYPE SWITCHER
+// ══════════════════════════════════════════════
+let currentTxType = 'รับซื้อ';
+
+function setTxType(type) {
+  currentTxType = type;
+  // toggle buttons
+  document.getElementById('tx-buy').classList.toggle('on', type==='รับซื้อ');
+  document.getElementById('tx-con').classList.toggle('on', type==='ฝากขาย');
+  document.getElementById('tx-pawn').classList.toggle('on', type==='จำนำ');
+  // show/hide sections
+  document.getElementById('sec-buy').style.display  = type==='รับซื้อ'  ? 'block' : 'none';
+  document.getElementById('sec-con').style.display  = type==='ฝากขาย'  ? 'block' : 'none';
+  document.getElementById('sec-pawn').style.display = type==='จำนำ'    ? 'block' : 'none';
+  // update owner label
+  const labels = {'รับซื้อ':'👤 ข้อมูลผู้ขาย','ฝากขาย':'👤 ข้อมูลเจ้าของสินค้า','จำนำ':'👤 ข้อมูลผู้จำนำ'};
+  document.getElementById('owner-label').textContent = labels[type];
+}
+
+function calcCom() {
+  const sale = parseFloat(document.getElementById('b-saleprice').value)||0;
+  const pct  = parseFloat(document.getElementById('b-compct').value)||0;
+  const com  = Math.round(sale * pct / 100);
+  const ret  = sale - com;
+  const prev = document.getElementById('com-preview');
+  if(sale > 0) {
+    prev.style.display='block';
+    document.getElementById('com-amt').textContent = '฿'+fmt(com);
+    document.getElementById('owner-return').textContent = '฿'+fmt(ret);
+  } else prev.style.display='none';
+}
+
+function calcPawn() {
+  const amt  = parseFloat(document.getElementById('b-pawnamt').value)||0;
+  const pct  = parseFloat(document.getElementById('b-intpct').value)||0;
+  const due  = document.getElementById('b-due-pawn').value;
+  const start= document.getElementById('b-date-pawn').value || new Date().toISOString().split('T')[0];
+  const prev = document.getElementById('pawn-preview');
+  if(amt > 0 && due) {
+    const days    = Math.round((new Date(due)-new Date(start))/86400000);
+    const months  = days/30;
+    const interest= Math.round(amt * pct / 100 * months);
+    const total   = amt + interest;
+    prev.style.display='block';
+    document.getElementById('pawn-days').textContent = days;
+    document.getElementById('pawn-int').textContent  = '฿'+fmt(interest);
+    document.getElementById('pawn-total').textContent= '฿'+fmt(total);
+  } else prev.style.display='none';
+}
+
+// ══════════════════════════════════════════════
+//  SAVE BUY (รับซื้อ / ฝากขาย / จำนำ)
+// ══════════════════════════════════════════════
+function chkBrand(){
+  document.getElementById('b-brand-o').classList.toggle('on',
+    document.getElementById('b-brand').value==='อื่นๆ (พิมพ์เอง)');
+}
+
+function saveBuy() {
+  const type  = document.getElementById('b-type').value;
+  const bsel  = document.getElementById('b-brand').value;
+  const brand = bsel==='อื่นๆ (พิมพ์เอง)' ? document.getElementById('b-brand-o').value.trim() : bsel;
+  const sname = document.getElementById('b-sname').value.trim();
+  if(!type||!brand||!sname){toast('⚠️ กรุณากรอกข้อมูลที่จำเป็น *','err');return;}
+  if(currentTxType==='รับซื้อ' && !document.getElementById('b-price').value){toast('⚠️ กรุณากรอกราคารับซื้อ','err');return;}
+  if(currentTxType==='ฝากขาย' && !document.getElementById('b-saleprice').value){toast('⚠️ กรุณากรอกราคาตั้งขาย','err');return;}
+  if(currentTxType==='จำนำ' && (!document.getElementById('b-pawnamt').value||!document.getElementById('b-due-pawn').value)){toast('⚠️ กรุณากรอกวงเงินและวันครบกำหนด','err');return;}
+
+  const btn=document.getElementById('btn-buy');
+  btn.disabled=true; btn.textContent='⏳ กำลังบันทึก...';
+  const dateField = currentTxType==='รับซื้อ' ? 'b-date' : currentTxType==='ฝากขาย' ? 'b-date-con' : 'b-date-pawn';
+  const dueField  = currentTxType==='ฝากขาย' ? 'b-due-con' : 'b-due-pawn';
+  const dateVal   = document.getElementById(dateField).value;
+
+  google.script.run
+    .withSuccessHandler(res=>{
+      btn.disabled=false; btn.textContent='✦ บันทึก → เข้า Stock';
+      if(res.success){
+        toast('✅ บันทึกสำเร็จ! '+res.stockId);
+        clearBuyForm(); stockData=[]; loadStock(); loadDash();
+      } else toast('❌ '+res.error,'err');
+    })
+    .withFailureHandler(()=>{btn.disabled=false;btn.textContent='✦ บันทึก → เข้า Stock';toast('❌ บันทึกไม่สำเร็จ','err');})
+    .addStock({
+      txType: currentTxType,
+      buyDate: dateVal ? new Date(dateVal).toLocaleDateString('th-TH') : '',
+      dueDate: document.getElementById(dueField)?.value || '',
+      type, brand,
+      model:   document.getElementById('b-model').value,
+      size:    document.getElementById('b-size').value,
+      color:   document.getElementById('b-color').value,
+      hardware:document.getElementById('b-hw').value,
+      buyPrice:  document.getElementById('b-price').value,
+      salePrice: document.getElementById('b-saleprice').value,
+      comPct:    document.getElementById('b-compct').value,
+      pawnAmt:   document.getElementById('b-pawnamt').value,
+      intPct:    document.getElementById('b-intpct').value,
+      sellerName:    sname,
+      sellerPhone:   document.getElementById('b-sphone').value,
+      sellerDob:     document.getElementById('b-sdob').value,
+      sellerIdCard:  document.getElementById('b-sid').value,
+      sellerAddress: document.getElementById('b-saddr').value,
+      sellerIg:      document.getElementById('b-sig').value,
+      notes:         document.getElementById('b-notes').value,
+    });
+}
+
+function clearBuyForm(){
+  ['b-model','b-size','b-color','b-price','b-saleprice','b-pawnamt',
+   'b-sname','b-sphone','b-sdob','b-sid','b-saddr','b-sig','b-notes','b-brand-o']
+    .forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  ['b-type','b-brand','b-hw'].forEach(id=>document.getElementById(id).selectedIndex=0);
+  document.getElementById('b-brand-o').classList.remove('on');
+  document.getElementById('b-compct').value='10';
+  document.getElementById('b-intpct').value='3';
+  const today=new Date().toISOString().split('T')[0];
+  ['b-date','b-date-con','b-date-pawn'].forEach(id=>document.getElementById(id).value=today);
+  ['b-due-con','b-due-pawn'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('com-preview').style.display='none';
+  document.getElementById('pawn-preview').style.display='none';
+}
+
+// ══════════════════════════════════════════════
+//  CUSTOMERS
+// ══════════════════════════════════════════════
+// ══════════════════════════════════════════════
+//  DELETE
+// ══════════════════════════════════════════════
+function confirmDelete(type, rowNum, label) {
+  const msg = type === 'stock'
+    ? `ยืนยันลบสินค้า "${label}" ?\n\nข้อมูลจะหายถาวร ไม่สามารถกู้คืนได้`
+    : `ยืนยันลบลูกค้า "${label}" ?\n\nข้อมูลจะหายถาวร ไม่สามารถกู้คืนได้`;
+  if (!confirm(msg)) return;
+
+  const fn = type === 'stock' ? 'deleteStock' : 'deleteCustomer';
+  google.script.run
+    .withSuccessHandler(res => {
+      if (res.success) {
+        toast(`🗑 ลบ "${label}" สำเร็จ`);
+        if (type === 'stock') { stockData=[]; loadStock(); loadDash(); }
+        else { custData=[]; loadCusts(); }
+      } else toast('❌ ลบไม่สำเร็จ: ' + res.error, 'err');
+    })
+    .withFailureHandler(() => toast('❌ ลบไม่สำเร็จ', 'err'))
+    [fn](rowNum);
+}
+
+
+  document.getElementById('custs-out').innerHTML='<div class="ld"><div class="sp"></div>กำลังโหลด...</div>';
+  google.script.run
+    .withSuccessHandler(data=>{ custData=data; renderCusts(data); })
+    .withFailureHandler(()=>toast('โหลดลูกค้าไม่ได้','err'))
+    .getCustomersWithSummary();
+}
+
+function renderCusts(custs){
+  if(!custs.length){
+    document.getElementById('custs-out').innerHTML='<div class="em"><div class="ei">👤</div><p>ยังไม่มีลูกค้า</p></div>';
+    return;
+  }
+  const rows=custs.map(c=>`
+    <tr>
+      <td class="m">${c['Customer ID']||''}</td>
+      <td><span class="badge ${c['ประเภท']==='ขาย'?'sell':c['ประเภท']==='ซื้อ-ขาย'?'both':'buy'}">${
+        c['ประเภท']==='ขาย'?'↑ ขาย':c['ประเภท']==='ซื้อ-ขาย'?'↕ ซื้อ-ขาย':'↓ ซื้อ'
+      }</span></td>
+      <td class="b">${c['ชื่อ-นามสกุล']||'-'}</td>
+      <td>${c['เบอร์โทร']||''}</td>
+      <td style="font-size:12px;color:var(--text3)">${c['IG / Line']||''}</td>
+      <td style="font-size:12px">${c['วันที่เป็นลูกค้าครั้งแรก']||''}</td>
+      <td>
+        ${c['_sellCount']>0
+          ? `<div style="font-size:12px;color:var(--orange)">↑ ขายให้ร้าน ${c['_sellCount']} ครั้ง</div>
+             <div style="font-size:13px;font-weight:600;color:var(--orange)">฿${fmt(c['_totalSellToShop'])}</div>`
+          : '<span style="color:var(--text3);font-size:12px">-</span>'}
+      </td>
+      <td>
+        ${c['_buyCount']>0
+          ? `<div style="font-size:12px;color:var(--green)">↓ ซื้อจากร้าน ${c['_buyCount']} ครั้ง</div>
+             <div style="font-size:13px;font-weight:600;color:var(--green)">฿${fmt(c['_totalBuyFromShop'])}</div>`
+          : '<span style="color:var(--text3);font-size:12px">-</span>'}
+      </td>
+      <td>
+        <button class="btn bsm" style="background:var(--red-bg);color:var(--red)" onclick="confirmDelete('customer',${c._row},'${c['ชื่อ-นามสกุล']||''}')">🗑 ลบ</button>
+      </td>
+    </tr>`).join('');
+
+  document.getElementById('custs-out').innerHTML=`
+    <div class="card" style="padding:0;overflow:hidden">
+      <div class="tw"><table>
+        <thead><tr>
+          <th>Customer ID</th><th>ประเภท</th><th>ชื่อ</th>
+          <th>เบอร์</th><th>IG/Line</th><th>เป็นลูกค้าตั้งแต่</th>
+          <th>ยอดขายให้ร้าน</th><th>ยอดซื้อจากร้าน</th><th></th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>
+    </div>`;
+}
+
+function filterCusts(){
+  const q=document.getElementById('cq').value.toLowerCase();
+  const t=document.getElementById('ct-f').value;
+  renderCusts(custData.filter(c=>(!q||JSON.stringify(c).toLowerCase().includes(q))&&(!t||c['ประเภท']===t)));
+}
+
+// ── Init ──────────────────────────────────────
+const _today = new Date().toISOString().split('T')[0];
+['b-date','b-date-con','b-date-pawn'].forEach(id=>{
+  const el = document.getElementById(id);
+  if(el) el.value = _today;
+});
+loadDash();
+</script>
+</body>
+</html>
